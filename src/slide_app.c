@@ -705,7 +705,22 @@ int app_trigger_fops_slide_route(void) {
   if (!select_slide_payload_index(0)) {
     return 0;
   }
-  int delay = delays[delay_index % (sizeof(delays) / sizeof(delays[0]))];
+  int delay = 0;
+#if defined(APP_FOPS_ROUTE_USE_PSELECT_DELAY) && APP_FOPS_ROUTE_USE_PSELECT_DELAY
+  const char *forced = getenv("PSELECT_DELAY_USEC");
+  if (forced && *forced) {
+    char *end = NULL;
+    errno = 0;
+    long value = strtol(forced, &end, 0);
+    if (!errno && end != forced && !*end && value >= 0 &&
+        value <= 1000000) {
+      delay = (int)value;
+    }
+  }
+#endif
+  if (!delay) {
+    delay = delays[delay_index % (sizeof(delays) / sizeof(delays[0]))];
+  }
   delay_index++;
   char delay_arg[16];
   snprintf(delay_arg, sizeof(delay_arg), "%d", delay);
