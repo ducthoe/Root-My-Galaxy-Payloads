@@ -19,6 +19,8 @@ Hardware status:
 
 - app-domain payload/root daemon: device-tested on the connected SM-A566E;
 - successful root evidence: `uid=2000 -> 0`, Kernel context `u:r:kernel:s0`;
-- KernelSU module: exact-vermagic build and target-symbol audit passed;
-- KernelSU late-load: first hardware run panicked; see
+- KernelSU module: exact-vermagic no-patch-text build and target-symbol audit
+  passed;
+- KernelSU late-load: live-patch EL2 crash identified; rebuilt artifact pending
+  retest; see
   `docs/SM-A566E-A566EXXSCCZG6.md`.

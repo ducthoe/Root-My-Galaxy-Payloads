@@ -101,22 +101,33 @@ CONFIG_RKP=y
 CONFIG_SECURITY_DEFEX=y
 ```
 
+For this Exynos target, the A56 module is built with:
+
+```text
+CONFIG_KSU_SAMSUNG_NO_PATCH_TEXT=y
+```
+
+That target flag makes KernelSU refuse `ksu_patch_text()` live writes instead
+of entering `stop_machine`. The syscall-table dispatcher then falls through to
+the Samsung RKP kretprobe/kprobe fallback, and selinux-hide slot patches fail
+closed instead of triggering Samsung EL2.
+
 The stripped standalone KO is:
 
 ```text
 kernelsu/android15-6.6_kernelsu-A566EXXSCCZG6-kdp.ko
-size: 327528
-SHA-256: ff18d067fe8d2ecb9ea7710d68856ae4c0033a0e37329c78926246b8dbff97a0
+size: 325760
+SHA-256: 82949cfa5d5588bb0bb1821c53bcbb7d5b9610301c374208216e2f08c4a7ab9d
 ```
 
 Static checks passed:
 
 ```text
 __versions size: 0
-undefined symbols: 221
+undefined symbols: 214
 module version entries: 0
 missing from target symbol table: 0
-symbols resolved from kallsyms rather than target exports: 67
+symbols resolved from kallsyms rather than target exports: 64
 target CRC mismatches: 0
 ```
 
@@ -125,11 +136,11 @@ The Android/AArch64 `ksud` binary embeds the A56 KO as
 
 ```text
 kernelsu/ksud-A566EXXSCCZG6-kdp
-size: 4765976
-SHA-256: f15ee6d9900155ec8ade6d098de64a86408734211103b5826e3a6d3d1474a2fb
+size: 4874312
+SHA-256: e8c2392de90b7bf71c7776d292d0d2e5dfcffd98c7be3d4fe403255a9d14945b
 ```
 
-The first hardware `late-load` run was attempted through the root daemon's
+The original hardware `late-load` run was attempted through the root daemon's
 DEFEX-safe bind-mount route. The phone rebooted. Recovered Samsung logs in
 `/sdcard/log/recovery` show repeated bad page table entries in process `toybox`
 followed by:
@@ -141,4 +152,17 @@ Kernel panic - not syncing: Oops: Fatal exception
 ```
 
 No KernelSU control fd was verified after that run. Treat this KernelSU pair as
-build/static-audit complete, not hardware-complete.
+build/static-audit complete until the no-patch-text artifact is hardware
+validated.
+
+A later app run reached root cleanly and staged KernelSU, then reset during
+`ksud late-load`. The recovered `/sdcard/log` dumpstate showed:
+
+```text
+exynos_report_el2_crash_info+0x53c/0x558 [exynos_el2]
+ksu_patch_text_cb+0x150/0x200 [kernelsu]
+```
+
+That confirmed the crash was KernelSU live patching, not the CVE-2026-43499
+root primitive. The current A56 artifact is rebuilt with live patching disabled
+for this target.
