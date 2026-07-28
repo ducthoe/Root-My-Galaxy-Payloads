@@ -87,7 +87,7 @@
       "abi": "arm64-v8a",
       "pageSize": 4096,
       "exploit": {
-        "url": "https://raw.githubusercontent.com/ducthoe/Root-My-Galaxy-Payloads/eabf3195a462f7c15102d7efc5bf5b49503d11f8/artifacts/essi-A566EXXSCCZG6/cve-2026-43499-app.so",
+        "url": "https://raw.githubusercontent.com/ducthoe/Root-My-Galaxy-Payloads/main/artifacts/essi-A566EXXSCCZG6/cve-2026-43499-app.so",
         "size": 104128
       },
       "kernelsu": {
