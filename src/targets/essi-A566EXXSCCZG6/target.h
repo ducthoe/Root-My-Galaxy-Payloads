@@ -13,7 +13,7 @@
  */
 
 #if defined(APP_PAYLOAD) && APP_PAYLOAD
-#define BUILD_VARIANT_LABEL "essi-A566EXXSCCZG6-app-physical-p0-mm4c0"
+#define BUILD_VARIANT_LABEL "essi-A566EXXSCCZG6-app-physical-p0-shape1"
 #define APP_PHYS_P0_ORACLE 1
 #else
 #define BUILD_VARIANT_LABEL "essi-A566EXXSCCZG6-root-umh"
@@ -29,7 +29,6 @@
 #define P0_PHYS_OFFSET 0x80000000ULL
 #define P0_KERNEL_PHYS_LOAD 0x80000000ULL
 #define SKB_DATA_DELTA (-0xe80LL)
-#define MM_STRUCT_SZ 0x4c0
 
 #define SLIDE_FAKE_WAITER_PRIO 0
 #define SLIDE_WAITER_WAKE_STATE 0
