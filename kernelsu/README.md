@@ -27,8 +27,9 @@ The 6.1 files are build-verified but device-untested. The E3Q pair is tied to
 the full S928U DZF2 release string and must not be replaced with the generic
 6.1 pair. The A56 CCZG6 pair is exact-release and static-audited. Its first
 hardware late-load builds panicked in Samsung/Exynos EL2 while KernelSU tried
-live text patching; the current A56 build disables that path and uses the
-Samsung fallback hooks. The 5.10 files are also build-verified and
+live text patching; the current A56 build disables that path, uses the
+Samsung fallback hooks, and reports KernelSU version code `32525` for manager
+compatibility. The 5.10 files are also build-verified and
 device-untested.
 
 ## Why the stock module crashes on Samsung
